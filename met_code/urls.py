@@ -27,6 +27,8 @@ urlpatterns = [
     path('metcode-panel/lab-duzenle/<int:project_id>/', views.edit_lab_project, name='edit_lab_project'), # BU SATIRI EKLE
 
     path('cikis/', views.custom_logout, name='custom_logout'),
+     path('kvkk/', views.kvkk_view, name='kvkk'),
+
 ]
 
 if settings.DEBUG:

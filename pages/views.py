@@ -202,3 +202,6 @@ def edit_lab_project(request, project_id):
         return redirect('custom_dashboard')
         
     return render(request, 'panel_edit_lab.html', {'proje': proje})
+
+def kvkk_view(request):
+    return render(request, 'kvkk.html')

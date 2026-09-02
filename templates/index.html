@@ -274,11 +274,15 @@
                     <textarea name="message" rows="4" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors resize-none backdrop-blur-sm" required placeholder="Web Sitesi, Yönetim Paneli vb..."></textarea>
                 </div>
                 
+               <form id="contactForm" method="POST" class="space-y-4">
+                {% csrf_token %}
+                <!-- Diğer form inputların (Ad, E-posta, Mesaj vs.) burada -->
+
                 <!-- YENİ: KVKK Onay Kutusu -->
                 <div class="flex items-start gap-3 mt-4">
                     <input type="checkbox" id="kvkk" required class="mt-1.5 w-4 h-4 rounded border-white/10 bg-black/40 text-primary focus:ring-primary focus:ring-offset-gray-900 cursor-pointer">
                     <label for="kvkk" class="text-xs text-gray-400 leading-relaxed cursor-pointer select-none">
-                        <a href="#" class="text-[#a855f7] hover:underline">KVKK Aydınlatma Metni</a>'ni okudum, kişisel verilerimin iletişim amacıyla işlenmesini onaylıyorum.
+                        <a href="{% url 'kvkk' %}" onclick="sessionStorage.setItem('kvkkReturnScroll', window.scrollY);" class="text-[#a855f7] hover:underline">KVKK Aydınlatma Metni</a>'ni okudum, kişisel verilerimin iletişim amacıyla işlenmesini onaylıyorum.
                     </label>
                 </div>
 
@@ -289,7 +293,13 @@
             
             <!-- YENİ: Form Gönderim Animasyonu -->
             <script>
-                document.getElementById('contactForm').addEventListener('submit', function() {
+                document.getElementById('contactForm').addEventListener('submit', function(e) {
+                    const checkbox = document.getElementById('kvkk');
+                    if (!checkbox.checked) {
+                        e.preventDefault();
+                        alert('Lütfen göndermeden önce KVKK metnini onaylayın.');
+                        return;
+                    }
                     const btn = document.getElementById('submitBtn');
                     const btnText = document.getElementById('btnText');
                     // Butonu kitleyip şeffaflaştırır
@@ -298,7 +308,35 @@
                     btnText.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Veriler İletiliyor...';
                 });
             </script>
+            <script>
+                const kvkkCheckbox = document.getElementById('kvkk');
+                const approvedForReturn = sessionStorage.getItem('kvkkApprovedForReturn') === 'true';
 
+                if (approvedForReturn) {
+                    kvkkCheckbox.checked = true;
+                    sessionStorage.removeItem('kvkkApprovedForReturn');
+                } else {
+                    kvkkCheckbox.addEventListener('click', function(event) {
+                        if (kvkkCheckbox.checked) {
+                            event.preventDefault();
+                            sessionStorage.setItem('kvkkReturnScroll', window.scrollY);
+                            window.location.href = "{% url 'kvkk' %}";
+                        }
+                    });
+                }
+
+                const returnScroll = sessionStorage.getItem('kvkkReturnScroll');
+                if (returnScroll !== null) {
+                    window.scrollTo(0, Number(returnScroll));
+                    sessionStorage.removeItem('kvkkReturnScroll');
+                }
+
+                window.addEventListener('storage', function(event) {
+                    if (event.key === 'kvkkApprovedForReturn' && event.newValue === 'true') {
+                        kvkkCheckbox.checked = true;
+                    }
+                });
+            </script>
     </div>
 </section>
 {% endblock %}

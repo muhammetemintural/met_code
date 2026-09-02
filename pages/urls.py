@@ -18,6 +18,7 @@ urlpatterns = [
     path('metcode-panel/sil/<int:project_id>/', views.delete_project, name='delete_project'),
     
     path('cikis/', views.custom_logout, name='custom_logout'),
+    path('kvkk/', views.kvkk_view, name='kvkk'),
 ]
 
 if settings.DEBUG:
