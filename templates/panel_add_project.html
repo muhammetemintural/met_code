@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Proje Ekle | met.code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Arama Kutusu (Choices.js) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    
+    <style>
+        body { background-color: #05050a; color: white; font-family: 'Segoe UI', sans-serif; }
+        .glass-panel { background: rgba(18, 18, 26, 0.65); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.07); }
+        .form-input { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s; }
+        .form-input:focus { border-color: #a855f7; box-shadow: 0 0 20px rgba(168,85,247,0.25); outline: none; }
+        
+        /* --- KUSURSUZ CHOICES.JS KARANLIK TEMA --- */
+        .choices[data-type*="select-multiple"] .choices__inner {
+            background-color: rgba(0, 0, 0, 0.4) !important; 
+            border: 1px solid rgba(255, 255, 255, 0.1) !important; 
+            border-radius: 0.75rem !important; 
+            padding: 0.4rem 0.5rem !important;
+        }
+        .choices__input { color: white !important; background-color: transparent !important; }
+        
+        /* Açılır Liste Z-Index ve Renk Ayarı (Listenin altta kalmasını önler) */
+        .choices__list--dropdown { 
+            background-color: #12121a !important; 
+            border: 1px solid rgba(168, 85, 247, 0.3) !important; 
+            z-index: 9999 !important; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
+        }
+        .choices__list--dropdown .choices__item { color: #e5e7eb !important; font-size: 14px; transition: 0.2s; }
+        .choices__list--dropdown .choices__item--selectable.is-highlighted { background-color: #a855f7 !important; color: white !important; }
+        
+        /* Seçilen Hap Tasarımları (Mor Kutular ve Beyaz Yazılar) */
+        .choices__list--multiple .choices__item {
+            background-color: #a855f7 !important; 
+            border: 1px solid #d8b4fe !important; 
+            border-radius: 0.5rem !important;
+            color: #ffffff !important; 
+            font-weight: 600 !important;
+            font-size: 13px !important;
+        }
+        
+        /* X (Silme) Butonunu Beyaz Yapma */
+        .choices[data-type*="select-multiple"] .choices__button { 
+            border-left: 1px solid rgba(255,255,255,0.4) !important; 
+            filter: brightness(0) invert(1) !important; 
+            opacity: 0.9 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4 md:px-8 relative overflow-x-hidden selection:bg-purple-500">
+    <div class="max-w-4xl mx-auto relative z-10 space-y-8">
+        
+        <!-- Header -->
+        <div class="glass-panel rounded-2xl p-6 flex items-center justify-between shadow-2xl">
+            <h1 class="text-xl font-black text-white"><i class="fa-solid fa-plus text-purple-500 mr-2"></i> Yeni Proje Ekle</h1>
+            <a href="{% url 'custom_dashboard' %}" class="bg-white/10 hover:bg-white/20 text-xs font-bold px-4 py-2 rounded-xl transition-all">İptal</a>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- BÖLÜM 1: Kategori ve Durum Seçimi -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-panel p-6 rounded-3xl">
+                    <label class="block text-xs font-bold text-gray-400 mb-4 uppercase">Kategori</label>
+                    <select name="category" class="form-input w-full rounded-xl px-4 py-3 text-sm text-white font-bold cursor-pointer">
+                        <option value="web">Web Geliştirme</option>
+                        <option value="mobil">Mobil Uygulama</option>
+                        <option value="otomasyon">Otomasyon & Bot</option>
+                        <option value="sistem">Sistem & Mimari</option>
+                        <option value="ai">Yapay Zeka & Siber</option>
+                    </select>
+                </div>
+
+                <div class="glass-panel p-6 rounded-3xl">
+                    <label class="block text-xs font-bold text-gray-400 mb-4 uppercase">Yayın Durumu</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="placement" value="vitrin" class="hidden peer" checked>
+                            <div class="border border-white/10 rounded-xl p-3 text-center transition-all peer-checked:bg-yellow-500/20 peer-checked:border-yellow-500/50 hover:bg-white/5">
+                                <i class="fa-solid fa-star text-yellow-400 mb-1 block"></i>
+                                <span class="text-xs font-bold text-white">Vitrinde Göster</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="placement" value="arsiv" class="hidden peer">
+                            <div class="border border-white/10 rounded-xl p-3 text-center transition-all peer-checked:bg-purple-500/20 peer-checked:border-purple-500/50 hover:bg-white/5">
+                                <i class="fa-solid fa-box-archive text-gray-400 mb-1 block"></i>
+                                <span class="text-xs font-bold text-white">Direkt Arşive Al</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BÖLÜM 2: Temel Bilgiler (Arama Kutusu Burada) -->
+            <div class="glass-panel p-8 rounded-3xl space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Proje Başlığı</label>
+                    <input type="text" name="title" required class="form-input w-full rounded-xl px-4 py-3 text-sm text-white">
+                </div>
+
+                <div class="relative z-50">
+                    <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Kullanılan Teknolojiler (Arayıp Seçiniz)</label>
+                    <select name="tech_choices" id="tech_search" multiple required>
+                        <optgroup label="Diller & Çerçeveler">
+                            <option value="Python">Python</option>
+                            <option value="Django">Django</option>
+                            <option value="JavaScript">JavaScript</option>
+                            <option value="React">React</option>
+                            <option value="HTML/CSS">HTML/CSS</option>
+                            <option value="TailwindCSS">TailwindCSS</option>
+                            <option value="C#">C#</option>
+                        </optgroup>
+                        <optgroup label="Sistem & Veritabanı">
+                            <option value="SQL">SQL</option>
+                            <option value="Firebase">Firebase</option>
+                            <option value="Kali Linux">Kali Linux</option>
+                            <option value="Docker">Docker</option>
+                            <option value="Git/GitHub">Git/GitHub</option>
+                            <option value="Machine Learning">Machine Learning</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Proje Açıklaması</label>
+                    <textarea name="description" rows="4" required class="form-input w-full rounded-xl px-4 py-3 text-sm text-white resize-none"></textarea>
+                </div>
+            </div>
+
+            <!-- BÖLÜM 3: Medya ve Bağlantılar -->
+            <div class="glass-panel p-8 rounded-3xl space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Ekran Görüntüsü</label>
+                        <input type="file" name="image" accept="image/*" class="form-input w-full rounded-xl px-4 py-2.5 text-xs text-gray-300 file:mr-4 file:py-1 file:px-3 file:rounded file:border-0 file:bg-purple-500 file:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">İkon (FontAwesome)</label>
+                        <input type="text" name="icon" value="fa-solid fa-code" class="form-input w-full rounded-xl px-4 py-3 text-sm text-white font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Canlı Link (Opsiyonel)</label>
+                        <input type="url" name="live_link" class="form-input w-full rounded-xl px-4 py-3 text-sm text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">GitHub Linki (Opsiyonel)</label>
+                        <input type="url" name="github_link" class="form-input w-full rounded-xl px-4 py-3 text-sm text-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kaydet -->
+            <div class="text-right pb-10">
+                <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-10 py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:-translate-y-1">
+                    <i class="fa-solid fa-database mr-2"></i> Sistemi Kaydet
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Akıllı Arama Kutusunu Başlatan Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const element = document.getElementById('tech_search');
+            const choices = new Choices(element, {
+                removeItemButton: true,
+                searchPlaceholderValue: 'Teknoloji ara (Örn: Python)...',
+                noResultsText: 'Sonuç bulunamadı',
+                itemSelectText: 'Ekle',
+            });
+        });
+    </script>
+</body>
+</html>

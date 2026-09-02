@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-20 relative z-10 min-h-screen">
+    <div class="max-w-7xl mx-auto px-6">
+        
+        <!-- Sayfa Başlığı -->
+        <div class="text-center mb-12 reveal">
+            <a href="{% url 'index' %}" class="inline-flex items-center gap-2 glass-panel text-primary px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-6 hover:text-white transition-colors">
+                <i class="fa-solid fa-arrow-left"></i> Ana Sayfaya Dön
+            </a>
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-4">Proje <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Arşivi</span></h1>
+            <p class="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">met.code tarafından geliştirilen tüm özel sistemler, web mimarileri ve yazılım çözümleri.</p>
+        </div>
+
+        <!-- FİLTRELEME BUTONLARI -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12 reveal">
+            <button class="filter-btn px-6 py-2.5 rounded-full border border-primary/50 bg-primary/20 text-white text-sm font-bold transition-all" data-filter="all">Tümü</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full border border-white/10 hover:border-primary/50 text-gray-400 hover:text-white text-sm font-bold transition-all" data-filter="web">Web</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full border border-white/10 hover:border-primary/50 text-gray-400 hover:text-white text-sm font-bold transition-all" data-filter="mobil">Mobil</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full border border-white/10 hover:border-primary/50 text-gray-400 hover:text-white text-sm font-bold transition-all" data-filter="otomasyon">Otomasyon</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full border border-white/10 hover:border-primary/50 text-gray-400 hover:text-white text-sm font-bold transition-all" data-filter="sistem">Sistem</button>
+            <button class="filter-btn px-6 py-2.5 rounded-full border border-white/10 hover:border-primary/50 text-gray-400 hover:text-white text-sm font-bold transition-all" data-filter="ai">Yapay Zeka</button>
+        </div>
+
+        <!-- Projeler Izgarası -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="archive-grid">
+            {% for proje in projeler %}
+            <!-- Veritabanındaki "category" verisini "data-category" içine yazdırıyoruz -->
+            <div class="project-card glass-panel rounded-3xl overflow-hidden group hover:border-primary/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all duration-500 reveal flex flex-col justify-between" data-category="{{ proje.category|default:'diger' }}">
+                <div>
+                    <!-- Görsel Alanı -->
+                    <div class="h-52 w-full relative overflow-hidden bg-gradient-to-br from-[#05050a] to-primary/20 flex items-center justify-center">
+                        {% if proje.image %}
+                        <img src="{{ proje.image.url }}" alt="{{ proje.title }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        {% else %}
+                        <i class="{{ proje.icon }} text-6xl text-primary/40 transform group-hover:scale-125 group-hover:text-primary transition-all duration-700"></i>
+                        {% endif %}
+                    </div>
+
+                    <!-- Detaylar -->
+                    <div class="p-8 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">{{ proje.technology }}</span>
+                            <i class="{{ proje.icon }} text-xl text-primary/70"></i>
+                        </div>
+                        
+                        <!-- TIKLANABİLİR BAŞLIK (Detay sayfasına gider) -->
+                        <a href="{% url 'project_detail' proje.id %}" class="hover:text-purple-400 transition-colors block">
+                            <h3 class="text-2xl font-bold text-white tracking-tight">{{ proje.title }}</h3>
+                        </a>
+                        
+                        <p class="text-gray-400 text-sm leading-relaxed font-light">{{ proje.description }}</p>
+                    </div>
+                </div>
+
+                <!-- Linkler -->
+                {% if proje.live_link or proje.github_link %}
+                <div class="px-8 pb-8 pt-2 flex items-center gap-3">
+                    {% if proje.live_link %}
+                    <a href="{{ proje.live_link }}" target="_blank" class="text-xs font-bold text-white bg-primary/20 hover:bg-primary border border-primary/40 px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Canlı Site
+                    </a>
+                    {% endif %}
+                    {% if proje.github_link %}
+                    <a href="{{ proje.github_link }}" target="_blank" class="text-xs font-bold text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fa-brands fa-github text-sm"></i> GitHub
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-16 glass-panel rounded-3xl">
+                <i class="fa-solid fa-ghost text-5xl text-gray-600 mb-4 block"></i>
+                <p class="text-gray-400 font-medium">Henüz arşivlenmiş proje bulunmuyor.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+<!-- ANINDA FİLTRELEME SCRİPTİ -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.project-card');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Tıklanan butonun stilini "Aktif (Mor)" yap, diğerlerini "Pasif (Gri)" yap
+                buttons.forEach(btn => {
+                    btn.classList.remove('bg-primary/20', 'border-primary/50', 'text-white');
+                    btn.classList.add('border-white/10', 'text-gray-400');
+                });
+                button.classList.remove('border-white/10', 'text-gray-400');
+                button.classList.add('bg-primary/20', 'border-primary/50', 'text-white');
+
+                // Projeleri seçilen kategoriye göre göster/gizle
+                const filterValue = button.getAttribute('data-filter');
+                
+                cards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = 'flex'; // Hepsini göster
+                    } else if (card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'flex'; // Eşleşenleri göster
+                    } else {
+                        card.style.display = 'none'; // Eşleşmeyenleri gizle
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

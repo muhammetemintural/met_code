@@ -3,106 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}met.code | Yeni Nesil Dijital Ajans{% endblock %}</title>
+    
+    <!-- Temel SEO Meta Etiketleri -->
+    <title>met.code | Yeni Nesil Yazılım Ajansı</title>
+    <meta name="description" content="İşletmenizi dijitale taşıyan özel kodlanmış modern web mimarileri, veri analizi çözümleri ve premium dijital vitrinler.">
+    <meta name="keywords" content="yazılım, web tasarım, özel yazılım, django, otomasyon, veri bilimi, met.code, metcode">
+    <meta name="author" content="met.code">
+    <meta name="robots" content="index, follow">
+
+    <!-- OpenGraph (WhatsApp, LinkedIn, Facebook için Paylaşım Kartları) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://met.code/"> <!-- Gerçek domainini alınca burayı değiştirirsin -->
+    <meta property="og:title" content="met.code | Dijital Çözüm Ortağınız">
+    <meta property="og:description" content="Size özel yazılım mimarileri ve otomasyon sistemleri inşa ediyoruz.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80"> <!-- Paylaşım Resmi -->
+
+    <!-- Twitter Kartları -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="met.code | Yeni Nesil Yazılım Ajansı">
+    <meta name="twitter:description" content="Özel yazılım çözümleriyle işletmenizi geleceğe taşıyın.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80">
+
+    <!-- Kütüphaneler (Mevcut olanların kalsın) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3262/3262067.png">
+     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#080b12',
-                        cardBg: '#111827',
-                        primary: '#3b82f6', 
+                        primary: '#a855f7', /* Neon Mor (Amethyst) */
+                        secondary: '#ec4899', /* Canlı Pembe (Magenta) */
+                        darkBg: '#05050a',  /* Katran Siyahı (Renklerin patlaması için) */
+                        cardBg: 'rgba(15, 15, 20, 0.7)', /* Çok Koyu Buzlu Cam */
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 3s alternate infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(168,85,247,0.2)' },
+                            '100%': { boxShadow: '0 0 35px rgba(168,85,247,0.6)' }
+                        }
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .bg-glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        body { background-color: #05050a; color: white; font-family: 'Segoe UI', system-ui, sans-serif; overflow-x: hidden; }
+        
+        /* Animasyon Hataları Giderildi */
+        .reveal { animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        @keyframes slideUp { 
+            0% { opacity: 0; transform: translateY(40px); } 
+            100% { opacity: 1; transform: translateY(0); } 
+        }
+        
+        /* Koyu Buzlu Cam Efekti */
+        .glass-panel {
+            background: rgba(20, 20, 25, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
-<body class="bg-darkBg text-gray-200 antialiased selection:bg-primary selection:text-white">
+<body class="antialiased selection:bg-secondary selection:text-white relative">
 
-    <!-- ÜST MENÜ (Güncellendi) -->
-    <nav class="fixed top-0 left-0 w-full z-50 bg-glass transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="/" class="text-2xl font-extrabold tracking-tight text-white">
-                met<span class="text-primary">.code</span>
+    <!-- Arka Plan Dinamik Neon Işıkları -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none z-0 animate-pulse-slow"></div>
+    <div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/15 rounded-full blur-[150px] pointer-events-none z-0 animate-pulse-slow delay-1000"></div>
+
+    <!-- Üst Menü -->
+    <nav class="fixed w-full z-50 glass-panel border-b-0 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="{% url 'index' %}" class="text-2xl font-black tracking-tighter text-white hover:scale-105 transition-transform">
+                MET<span class="text-primary">.code</span>
             </a>
-            
-            <!-- Masaüstü Menü -->
-            <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                <a href="#hakkimizda" class="text-gray-400 hover:text-white transition-colors">Hakkımızda</a>
-                <a href="#hizmetler" class="text-gray-400 hover:text-white transition-colors">Hizmetler</a>
-                <a href="#projeler" class="text-gray-400 hover:text-white transition-colors">Projeler</a>
-                <a href="#iletisim" class="bg-primary text-white px-6 py-2.5 rounded-lg hover:bg-blue-600 transition-colors">İletişim</a>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-300">
+                <a href="#hakkimizda" class="hover:text-primary hover:-translate-y-0.5 transition-all">Biz Kimiz?</a>
+                <a href="#teknolojiler" class="hover:text-primary hover:-translate-y-0.5 transition-all">Altyapımız</a>
+                <a href="#projeler" class="hover:text-primary hover:-translate-y-0.5 transition-all">Çözümlerimiz</a>
             </div>
-
-            <!-- Mobil Menü Butonu -->
-            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none">
-                <i class="fa-solid fa-bars text-2xl"></i>
-            </button>
-        </div>
-
-        <!-- Mobil Menü İçeriği -->
-        <div id="mobile-menu" class="hidden md:hidden bg-cardBg border-t border-gray-800 absolute w-full left-0 shadow-2xl">
-            <div class="flex flex-col px-6 py-4 space-y-4">
-                <a href="#hakkimizda" class="text-gray-300 hover:text-primary mobile-link">Hakkımızda</a>
-                <a href="#hizmetler" class="text-gray-300 hover:text-primary mobile-link">Hizmetler</a>
-                <a href="#projeler" class="text-gray-300 hover:text-primary mobile-link">Projeler</a>
-                <a href="#iletisim" class="text-primary font-bold mobile-link">İletişim</a>
-            </div>
+            <a href="#iletisim" class="text-sm font-bold text-white bg-primary px-5 py-2.5 rounded-xl hover:bg-secondary transition-all animate-glow shadow-lg">
+                Bize Ulaşın
+            </a>
         </div>
     </nav>
 
-    <main class="pt-20">
-        {% block content %}{% endblock %}
+    <main class="pt-20 relative z-10">
+        {% block content %}
+        {% endblock %}
     </main>
 
-    <footer class="bg-cardBg py-10 border-t border-gray-800 text-center text-sm text-gray-500">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-            <p>&copy; 2026 met.code. Tüm hakları saklıdır.</p>
-            <div class="flex space-x-4 mt-4 md:mt-0">
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-github text-lg"></i></a>
-                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-linkedin text-lg"></i></a>
-            </div>
-        </div>
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/5 glass-panel text-center relative z-10 mt-12">
+        <p class="text-gray-500 text-sm">© 2026 met.code Yazılım Ajansı. Tüm hakları saklıdır.</p>
     </footer>
 
-    <!-- JavaScript -->
-    <script>
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                if (elementTop < windowHeight - 100) reveals[i].classList.add("active");
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        reveal(); 
-
-        const btn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-
-        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-        mobileLinks.forEach(link => link.addEventListener('click', () => menu.classList.add('hidden')));
-
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 20) nav.classList.add('shadow-lg', 'shadow-primary/5');
-            else nav.classList.remove('shadow-lg', 'shadow-primary/5');
-        });
-    </script>
 </body>
-</html> 
+</html>

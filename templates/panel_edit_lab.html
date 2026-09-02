@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratuvar Projesini Düzenle | met.code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body { background-color: #05050a; color: white; font-family: 'Segoe UI', sans-serif; }
+        .glass-panel { background: rgba(18, 18, 26, 0.65); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.07); }
+        .form-input { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s; }
+        .form-input:focus { border-color: #a855f7; box-shadow: 0 0 20px rgba(168,85,247,0.25); outline: none; }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4 flex items-center justify-center">
+    <div class="max-w-2xl w-full">
+        <div class="glass-panel p-8 rounded-3xl shadow-2xl relative">
+            <h2 class="text-2xl font-black text-white mb-6 border-b border-white/5 pb-4"><i class="fa-solid fa-flask text-blue-400 mr-2"></i> Projeyi Güncelle</h2>
+            
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Proje Başlığı</label>
+                    <input type="text" name="title" value="{{ proje.title }}" required class="form-input w-full rounded-xl px-4 py-3 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Kısa Açıklama</label>
+                    <textarea name="description" rows="3" required class="form-input w-full rounded-xl px-4 py-3 text-sm text-white resize-none">{{ proje.description }}</textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">İlerleme (%)</label>
+                        <input type="number" name="progress" min="1" max="100" value="{{ proje.progress }}" required class="form-input w-full rounded-xl px-4 py-3 text-sm text-white font-bold text-blue-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase">Tema Rengi</label>
+                        <select name="color" class="form-input w-full rounded-xl px-4 py-3 text-sm text-white font-bold cursor-pointer">
+                            <option value="primary" class="bg-gray-900 text-[#a855f7]" {% if proje.color == 'primary' %}selected{% endif %}>Mor (Primary)</option>
+                            <option value="secondary" class="bg-gray-900 text-[#ec4899]" {% if proje.color == 'secondary' %}selected{% endif %}>Pembe (Secondary)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 mt-8">
+                    <a href="{% url 'custom_dashboard' %}" class="px-6 py-3 rounded-xl text-gray-400 hover:text-white font-bold text-sm">İptal</a>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all">Değişiklikleri Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
