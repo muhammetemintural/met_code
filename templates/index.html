@@ -274,10 +274,6 @@
                     <textarea name="message" rows="4" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors resize-none backdrop-blur-sm" required placeholder="Web Sitesi, Yönetim Paneli vb..."></textarea>
                 </div>
                 
-               <form id="contactForm" method="POST" class="space-y-4">
-                {% csrf_token %}
-                <!-- Diğer form inputların (Ad, E-posta, Mesaj vs.) burada -->
-
                 <!-- YENİ: KVKK Onay Kutusu -->
                 <div class="flex items-start gap-3 mt-4">
                     <input type="checkbox" id="kvkk" required class="mt-1.5 w-4 h-4 rounded border-white/10 bg-black/40 text-primary focus:ring-primary focus:ring-offset-gray-900 cursor-pointer">
